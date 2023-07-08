@@ -31,6 +31,29 @@ namespace PET.Services
             }
         }
 
+        public async Task<bool> DeleteSaleProducts()
+        {
+            try
+            {
+                var SaleProducts = await _context.SalesProduct.ToListAsync();
+                if (SaleProducts is not null)
+                {
+                    _context.SalesProduct.RemoveRange(SaleProducts);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+
+                throw;
+            }
+        }
+
         public async Task<bool> DeleteSalesProduct(int id)
         {
             try
@@ -47,7 +70,7 @@ namespace PET.Services
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch
             {
 
                 throw;
@@ -137,6 +160,7 @@ namespace PET.Services
                         await _context.SaveChangesAsync();
                     } 
                 }
+                await DeleteSaleProducts();
                 return true;
             }
             catch

@@ -15,6 +15,6 @@ namespace PET.Models
         public SubCategory? SubCategory { get; set; }
         public int? SubCategoryId { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public ApplicationUser? User { get; set; }
     }
 }

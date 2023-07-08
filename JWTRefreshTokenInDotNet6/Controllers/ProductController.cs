@@ -56,7 +56,7 @@ namespace PET.Controllers
         }
 
         [HttpPost("Upload"), DisableRequestSizeLimit]
-        public IActionResult Upload()
+        public async Task<IActionResult> Upload()
         {
             try
             {
@@ -65,14 +65,17 @@ namespace PET.Controllers
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                 if (file.Length > 0)
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fileInfo = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fileName = Request.Form["Product.Id"].ToString() + Path.GetExtension(fileInfo);
                     var fullPath = Path.Combine(pathToSave, fileName);
-                    var dbPath = Path.Combine(folderName, fileName);
+                    var dbPath = Path.Combine("Images", fileName);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
                     }
-                    return Ok(new { dbPath });
+
+                    await _iservice.SaveProductPath(dbPath, Convert.ToInt32(Request.Form["Product.Id"].ToString()));
+                    return Ok(new { fullPath });
                 }
                 else
                 {

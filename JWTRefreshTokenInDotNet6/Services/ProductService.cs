@@ -139,5 +139,29 @@ namespace PET.Services
                 throw;
             }
         }
+
+        public async Task<bool> SaveProductPath(string Path,int ProductId)
+        {
+            try
+            {
+                var product = await _context.Product.FindAsync(ProductId);
+                if (product is not null)
+                {
+                    product.Photo = Path; 
+                    _context.Product.Update(product);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+
+                throw;
+            }
+        }
     }
 }

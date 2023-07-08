@@ -12,6 +12,7 @@ namespace PET.Iservices
         Task<List<SalesProduct>> GetAllSalesProduct();
         Task<bool> MakeOrder(OrderDto order);
         Task<List<OrderListDto>> GetOrders();
+        Task<bool> DeleteSaleProducts();
 
     }
 }

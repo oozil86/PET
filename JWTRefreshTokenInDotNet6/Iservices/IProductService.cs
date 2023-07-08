@@ -6,6 +6,7 @@ namespace PET.Iservices
     {
         Task<Product> AddProduct(Product model);
         Task<Product> EditProduct(Product model);
+        Task<bool> SaveProductPath(string Path, int ProductId);
         Task<bool> DeleteProduct(int id);
         Task<List<Product>> GetAllProduct();
         Task<Product> GetAllProductById(int ProductId);

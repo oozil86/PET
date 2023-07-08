@@ -8,6 +8,7 @@ using JWTRefreshTokenInDotNet6.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using PET.Iservices;
 using PET.Services;
@@ -91,7 +92,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("corsapp");
-
+var x = Path.Combine(Directory.GetCurrentDirectory(), Path.Combine("Resources", "Images"));
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine( Directory.GetCurrentDirectory(), Path.Combine("Resources", "Images"))),
+    RequestPath = new PathString( "/Images")
+});
 
 ////RecurringJob.AddOrUpdate(() => Console.WriteLine("Sent similar product offer and suuggestions"), Cron.Minutely);
 //RecurringJob.AddOrUpdate(() => Console.WriteLine("Sent similar product offer and suuggestions"), TimeSpan.FromMinutes(1));

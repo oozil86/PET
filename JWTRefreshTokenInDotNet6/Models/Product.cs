@@ -1,4 +1,6 @@
-﻿namespace PET.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PET.Models
 {
     public class Product
     {
@@ -13,6 +15,6 @@
         public SubCategory? SubCategory { get; set; }
         public int? SubCategoryId { get; set; }
 
-
+        public ApplicationUser User { get; set; }
     }
 }

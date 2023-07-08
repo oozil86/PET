@@ -1,7 +1,5 @@
 ﻿
 
-using PET.Dtos;
-
 namespace Alzheimer.Iservices;
 
 public interface IAppointmentService
@@ -13,6 +11,6 @@ public interface IAppointmentService
     Task<bool> DeleteAppointment(int id);
     Task<bool> ApproveAppointment(int id);
     Task<bool> DeclineAppointment(int id);
-    Task<List<AppointmentDto>> GetAppointment();
+    Task<List<Appointment>> GetAppointment();
     Task<Appointment> GetDoctorById(int Id);
 }

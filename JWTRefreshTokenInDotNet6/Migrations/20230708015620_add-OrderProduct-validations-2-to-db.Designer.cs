@@ -4,6 +4,7 @@ using JWTRefreshTokenInDotNet6.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PET.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230708015620_add-OrderProduct-validations-2-to-db")]
+    partial class addOrderProductvalidations2todb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,7 +168,7 @@ namespace PET.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("OrderProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -175,8 +177,6 @@ namespace PET.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderProducts");
                 });
@@ -521,6 +521,9 @@ namespace PET.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("OrderProductId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Photo")
                         .HasColumnType("nvarchar(max)");
 
@@ -534,13 +537,13 @@ namespace PET.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubCategoryId");
+                    b.HasIndex("OrderProductId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("SubCategoryId");
 
                     b.ToTable("Product");
                 });
@@ -633,14 +636,6 @@ namespace PET.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("PET.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("JWTRefreshTokenInDotNet6.Models.ApplicationUser", b =>
@@ -733,17 +728,15 @@ namespace PET.Migrations
 
             modelBuilder.Entity("PET.Models.Product", b =>
                 {
+                    b.HasOne("GraduationProject.Models.OrderProduct", null)
+                        .WithMany("Products")
+                        .HasForeignKey("OrderProductId");
+
                     b.HasOne("PET.Models.SubCategory", "SubCategory")
                         .WithMany()
                         .HasForeignKey("SubCategoryId");
 
-                    b.HasOne("JWTRefreshTokenInDotNet6.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("SubCategory");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PET.Models.SalesProduct", b =>
@@ -767,6 +760,11 @@ namespace PET.Migrations
             modelBuilder.Entity("GraduationProject.Models.Order", b =>
                 {
                     b.Navigation("OrderProducts");
+                });
+
+            modelBuilder.Entity("GraduationProject.Models.OrderProduct", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

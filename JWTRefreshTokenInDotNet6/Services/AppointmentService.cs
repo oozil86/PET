@@ -1,7 +1,6 @@
 ﻿
 
 using Microsoft.EntityFrameworkCore;
-using PET.Dtos;
 
 namespace GraduationProject.Services;
 
@@ -79,26 +78,8 @@ public class AppointmentService : IAppointmentService
         }
     }
 
-    public async Task<List<AppointmentDto>> GetAppointment()
-    {
-        var Appointments = from appointment in _context.Appointments
-                           join user in _context.Users
-                           on appointment.UserId equals user.Id
-                           select new AppointmentDto
-                           {
-                               AppointmentTime = appointment.AppointmentTime,
-                               UserId = appointment.UserId,
-                               Id = appointment.Id,
-                               IsReserved = appointment.IsReserved,
-                               Name = appointment.Name,
-                               Nmber = appointment.Nmber,
-                               price = appointment.price,
-                               time = appointment.time,
-                               ClientName = user.FirstName + " " + user.LastName,
-                           };
-
-        return await Appointments.ToListAsync();
-    }
+    public async Task<List<Appointment>> GetAppointment()
+             => await _context.Appointments.ToListAsync();
 
     public async Task<Appointment> GetDoctorById(int Id)
     {

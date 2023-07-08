@@ -4,6 +4,7 @@ using JWTRefreshTokenInDotNet6.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PET.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230708015730_add-OrderProduct-validations-3-to-db")]
+    partial class addOrderProductvalidations3todb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,7 +168,10 @@ namespace PET.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("OrderProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductsId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -176,7 +181,7 @@ namespace PET.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductsId");
 
                     b.ToTable("OrderProducts");
                 });
@@ -534,13 +539,11 @@ namespace PET.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SubCategoryId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Product");
                 });
@@ -634,13 +637,13 @@ namespace PET.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PET.Models.Product", "Product")
+                    b.HasOne("PET.Models.Product", "Products")
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("JWTRefreshTokenInDotNet6.Models.ApplicationUser", b =>
@@ -737,13 +740,7 @@ namespace PET.Migrations
                         .WithMany()
                         .HasForeignKey("SubCategoryId");
 
-                    b.HasOne("JWTRefreshTokenInDotNet6.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("SubCategory");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PET.Models.SalesProduct", b =>

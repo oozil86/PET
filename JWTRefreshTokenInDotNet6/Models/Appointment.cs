@@ -28,8 +28,5 @@ namespace Alzheimer.Models
         public int? IsWorkFlow { get; set; } = 1;
         public string? ClientName { get; set; }
 
-
-
-
     }
 }

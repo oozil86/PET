@@ -44,9 +44,6 @@ public class AppointmentController : ControllerBase
         }
     }
 
-
-
-
     [HttpPost("BookAppointment")]
     public async Task<IActionResult> BookAppointment(Appointment model)
     {
@@ -91,10 +88,6 @@ public class AppointmentController : ControllerBase
         }
         else return BadRequest();
     }
-
-
-
-
 
     [HttpGet("GetListAppointment")]
     public async Task<IActionResult> GetListAppointment()

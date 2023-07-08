@@ -1,4 +1,5 @@
-﻿using PET.Iservices;
+﻿using PET.Dto;
+using PET.Iservices;
 using PET.Models;
 
 namespace PET.Services
@@ -58,6 +59,103 @@ namespace PET.Services
             try
             {
                 return await _context.SalesProduct.ToListAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<OrderListDto>> GetOrders()
+        {
+            try
+            {
+                var orders = from order in _context.Orders.Include(c => c.OrderProducts).ThenInclude(c => c.Product)
+                             .ThenInclude(c => c.SubCategory).ThenInclude(c => c.Category)
+                             .Include(c=>c.OrderProducts).ThenInclude(c=>c.Product).ThenInclude(c=>c.User)
+                             join User in _context.Users
+                             on order.UserId equals User.Id
+                             select new OrderListDto
+                             {
+                                 Name = order.Name,
+                                 Id = order.Id,
+                                 Phone = order.Phone,
+                                 Status = order.Status,
+                                 Address = order.Address,
+                                 Appartment = order.Appartment,
+                                 Price = order.Price,
+                                 UserId = order.UserId,
+                                 UserName = User.Email,
+                                 OrderProducts = order.OrderProducts,
+                                 
+                             };
+                
+                return await orders.ToListAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<bool> MakeOrder(OrderDto order)
+        {
+            try
+            {
+                var _order = new Order
+                {
+                    Id = order.Id,
+                    Address = order.Address,
+                    Appartment = order.Appartment,
+                    Name = order.Name,
+                    Phone = order.Phone,
+                    Price = order.Price,
+                    Status = order.Status,
+                    UserId = order.UserId,
+                };
+
+                await _context.Orders.AddAsync(_order);
+                await _context.SaveChangesAsync();
+
+                var IsExists = new List<int>();
+               
+                foreach (var OrderProduct in order.OrderProducts)
+                {
+
+                    if (!IsExists.Where(c => c == OrderProduct.OrderProductId).Any())
+                    {
+                        var product = new OrderProduct
+                        {
+                            OrderId = _order.Id,
+                            Quantity = order.OrderProducts.Where(c => c.OrderProductId == OrderProduct.OrderProductId).Sum(c => c.Quantity),
+                            ProductId = OrderProduct.OrderProductId,
+                        };
+                        IsExists.Add(product.ProductId);
+                        await _context.OrderProducts.AddAsync(product);
+                        await _context.SaveChangesAsync();
+                    } 
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<List<OrderListDto>> UpdateOrderStatus(int OrderId)
+        {
+            try
+            {
+
+                var Order = await _context.Orders.FindAsync(OrderId);
+
+                Order.Status = "Delivered";
+                _context.Orders.Update(Order);
+                await _context.SaveChangesAsync();
+                return await GetOrders();
             }
             catch (Exception)
             {

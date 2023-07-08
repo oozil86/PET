@@ -15,7 +15,7 @@ namespace PET.Services
                 await _context.SaveChangesAsync();
                 return model;
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
@@ -37,7 +37,7 @@ namespace PET.Services
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch
             {
 
                 throw;
@@ -52,7 +52,7 @@ namespace PET.Services
                 await _context.SaveChangesAsync();
                 return model;
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }

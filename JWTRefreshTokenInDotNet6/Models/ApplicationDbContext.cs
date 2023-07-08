@@ -21,7 +21,8 @@ namespace JWTRefreshTokenInDotNet6.Models
         public DbSet<Grooming> Grooming { get; set; }
         public DbSet<SalesProduct> SalesProduct { get; set; }
         public DbSet<WishProduct> WishProduct { get; set; }
-       
-      
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace PET.Models
 {
@@ -18,6 +19,10 @@ namespace PET.Models
 
         public string? Address { get; set; }
         public string? Location { get; set; }
-
+        [Required]
+        public string Longitude { get; set; }
+        [Required]
+        public string Latitude { get; set; }
+        public string? ClientName { get; set; }
     }
 }
